@@ -25,15 +25,15 @@ jobs:
           target: esp32s3
           command: idf.py build
 
+      - name: Install esptool
+        run: pip install esptool
+
       - name: Create Merged Binary
         run: |
-          # البحث عن ملف التطبيق الرئيسي ودمجه
           cd build
-          # استخدام الأمر find للعثور على الملف الذي يحتوي على اسم المشروع
           APP_BIN=$(find . -maxdepth 1 -name "*.bin" ! -name "bootloader.bin" ! -name "partition-table.bin" | head -n 1)
           echo "Found app binary: $APP_BIN"
           
-          # دمج الملفات
           esptool.py --chip esp32s3 merge_bin -o merged.bin \
             --flash_mode dio --flash_freq 80m --flash_size 16MB \
             0x0 bootloader/bootloader.bin \
