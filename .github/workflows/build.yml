@@ -15,13 +15,13 @@ jobs:
       - name: Install ESP-IDF
         uses: espressif/esp-idf-ci-action@v1
         with:
-          esp_idf_version: v5.1.2 # أو الإصدار الذي يطلبه المشروع
+          esp_idf_version: v5.3
           target: esp32s3
 
       - name: Build Firmware
         uses: espressif/esp-idf-ci-action@v1
         with:
-          esp_idf_version: v5.1.2
+          esp_idf_version: v5.3
           target: esp32s3
           command: idf.py build
 
