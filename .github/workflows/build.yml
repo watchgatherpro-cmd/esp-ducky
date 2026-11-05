@@ -30,22 +30,27 @@ jobs:
 
       - name: Create Merged Binary
         run: |
+          # الانتقال إلى مجلد build للبحث عن الملفات
           cd build
           APP_BIN=$(find . -maxdepth 1 -name "*.bin" ! -name "bootloader.bin" ! -name "partition-table.bin" | head -n 1)
           echo "Found app binary: $APP_BIN"
           
-          esptool.py --chip esp32s3 merge_bin -o merged.bin \
-            --flash_mode dio --flash_freq 80m --flash_size 16MB \
-            0x0 bootloader/bootloader.bin \
-            0x8000 partition_table/partition-table.bin \
-            0x10000 $APP_BIN
+          # العودة إلى المجلد الرئيسي لإنشاء الملف هناك
+          cd ..
+          
+          # تنفيذ أمر الدمج (مع تحديث الأسماء لتجنب التحذيرات)
+          esptool --chip esp32s3 merge-bin -o merged.bin \
+            --flash-mode dio --flash-freq 80m --flash-size 16MB \
+            0x0 build/bootloader/bootloader.bin \
+            0x8000 build/partition_table/partition-table.bin \
+            0x10000 build/$APP_BIN
 
       - name: Upload Firmware
         uses: actions/upload-artifact@v4
         with:
           name: firmware-bin
           path: |
-            build/merged.bin
+            merged.bin
             build/bootloader/bootloader.bin
             build/partition_table/partition-table.bin
             build/*.bin
