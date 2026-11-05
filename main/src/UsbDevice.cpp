@@ -36,8 +36,8 @@ reportDescriptor({
     TUD_HID_REPORT_DESC_MOUSE(HID_REPORT_ID(HID_ITF_PROTOCOL_MOUSE))
 }),
 stringDescriptor({
-    // array of pointer to string descriptors
-    (char[]){0x09, 0x04},  // 0: is supported language is English (0x0409)
+    // تم إصلاح السطر 40 هنا: استخدام reinterpret_cast بدلاً من مصفوفة مؤقتة
+    reinterpret_cast<const char*>("\x09\x04"), // 0: is supported language is English (0x0409)
     "esp-ducky",           // 1: Manufacturer
     "esp-ducky",           // 2: Product
     "B16B00B5",            // 3: Serial Number 
